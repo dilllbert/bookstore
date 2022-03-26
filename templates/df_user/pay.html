@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static%}
+{% load timedelta_filter %}
+{% block title %}付款介面{% endblock title %}
+{% block body %}
+
+    <div class="container pay_detail_look" id = "pay_detail_look">
+        <div class="row ">
+            <div class="col align-self-start" > 付款幒額:</div>
+            <div class="col align-self-end">${{sum}}</div>
+        </div>
+        <div  class="row ">
+            <div class="col " id="rtime">付款剩餘時間:</div>    
+            <div  class="col">
+                <div id = "time" >{{delta|timedelta:"{days_total}日{hours2}小時{minutes2}分鐘{seconds2}秒"}}</div>       
+                <div id="duetime">{{pay_due|date:'在Y年m月d日 H:i到期'}}</div>
+            </div>        
+        </div>
+        <div  class="row ">
+            <div class="col-8">帳戶號碼:</div>    
+            <div class="col" id="bancnum" style="text-align: right;">0000 0000 0000 0000</div>        
+        </div>
+        <div class="list-group" id="list">
+            <h5 class="mb-1">請遵照這些指示</h5>
+            <div></div>
+            <div class="paytext">
+                <li>請使用網路銀行或實體ATM將金額轉入以上帳戶。</li>
+                <li>轉帳完成後30分鐘可至訂單頁面查詢付款狀態，並請保留轉帳收據直至帳款入帳。若轉帳後48小時仍未入帳，請再與我們聯繫查詢。</li>
+                <li>安全提醒：若第三方對您提出以下要求，請勿直接遵照他方指示。如：第三方要求您轉帳至私人帳號、在ATM解除分期付款、掃描QR code進入非本網站或提早要求您按下[完成訂單]等。
+                </li>
+            </div>  
+        </div>
+    </div>
+    
+
+
+
+{% endblock body %}

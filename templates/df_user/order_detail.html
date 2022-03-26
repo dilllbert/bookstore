@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block title %}登入{% endblock title %}
+{% block header_con %}
+{% endblock header_con %}
+{% block search_bar %}{% endblock search_bar %}
+{% block body %}
+
+{% for book in skuinfos %}
+    <div  class="pa_detail_look">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                
+                <th scope="col">商品名稱</th>
+                <th scope="col">商品價格</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for book in skuinfos %}
+        <tr>
+            <td>
+                {{book.sku.ISBN.title}}
+            </td>
+                <td>
+                    {{book.sku.price}}
+                </td>
+            </tr>
+             
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>       
+    
+      
+    
+{% endfor %}
+<ul class="order_detail_look" style="background-color: #f7f7f7;">
+    <div style="margin-top: 10px;margin-right:10px;text-align: right;">總消費金額:{{order.total_price}}</div>
+    <div style="margin-top: 10px;;margin-right:10px; margin-bottom: 10px;text-align: right;">總運費:{{order.transit_price}}</div>
+</ul>
+
+
+{% endblock body %}

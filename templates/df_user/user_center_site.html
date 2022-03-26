@@ -1,0 +1,75 @@
+{% extends 'base_user_center.html' %}
+{% block title %}地址管理{% endblock title %}
+{%block topfiles%}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+	function cart_del(cart_id){
+	del=confirm('確定要刪除嗎?');
+	if(del){
+	 $.get('/user/delete'+ cart_id + '/',function(data){
+     $('div').remove('.' + cart_id);
+    
+   });
+	}
+   }
+</script>
+{%endblock topfiles%}
+{% block right_content %}
+		<div class="right_content clearfix">
+				<h6 class="common_title2">收貨地址</h6>
+				<div class="site_con">
+					<dl>
+						<dt>當前地址：</dt>
+                        {% if address %}
+							{% for addr in address %}
+							<div class="container">
+								<div class="row addr "> 
+						    		<div class="col-11  {{addr.id}}" id="">&nbsp&nbsp&nbsp&nbsp{{ addr.addr }} （{{ addr.receiver }} 收） {{ addr.phone }}</div>
+									<div class="col-1  {{addr.id}}" id="ad"><a href="javascript:cart_del({{addr.id}});">刪除&nbsp</a></div>
+								</div>
+							</div>
+							{% endfor %}
+					    {% else %}
+                            <dd>無</dd>
+                        {% endif %}
+						
+                    </dl>
+				</div>
+				<h6 class="common_title2">新增地址</h6>
+				<div class="site_con">
+					<form method="post" action="{% url 'user:address' %} "onsubmit=" return  toVaild(this)">
+                        {% csrf_token %}
+						<div class="form_group">
+							<label>收件人：</label>
+							<input type="text" name="receiver" required>
+						</div>
+						<div class="form_group form_group2">
+							<label>詳細地址：</label>
+							<textarea class="site_area" name="addr" required></textarea>
+						</div>
+						<input type="hidden" name="hidden_string" value="0" >
+						<div class="form_group">
+							<label>手機：</label>
+							<input type="text" name="phone" id="ff" required>
+						</div>
+
+						<input type="submit" name="" value="提交" class="info_submit">
+					</form>
+				</div>
+		</div>
+{% endblock right_content %}
+{% block bottomfiles %}
+<script language="javascript">
+	function toVaild(){
+		var patt = /^09[0-9]{8}$/;
+		var val = document.getElementById("ff").value;
+		if(patt.test(val)){
+			return true;
+		}
+		else{
+			alert("手機號碼格式輸入錯誤，不進行提交");
+			return false;
+		}
+	}
+</script>
+{% endblock bottomfiles %}

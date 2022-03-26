@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static%}
+{% load timedelta_filter %}
+{% block title %}訂單詳情{% endblock title %}
+{% block body %}
+
+<div class="pay_detail_look" >
+    
+    <div class="riv" >
+        <b class="rece" id="rece">收件地址</b>
+        <div class="rece">{{order.addr.receiver}}</div>
+        <div class="rece">{{order.addr.phone}}</div>
+        <div class="rece lelem" >{{order.addr.addr}}</div>
+    </div>
+    {% if order.card %}
+        <div id="rece">
+            <b class="rece" id="rece">銀行帳號</b>
+            <div class="rece lelem">{{order.card.account}}</div>        
+        </div>
+    {% endif %}
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            
+            <th scope="col">商品名稱</th>
+            <th scope="col">商品價格</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for book in skuinfos %}
+    <tr>
+        <td>
+            {{book.sku.ISBN.title}}
+        </td>
+            <td>
+                {{book.sku.price}}
+            </td>
+        </tr>
+         
+    {% endfor %}
+</tbody>
+</table>
+
+</div>
+
+
+
+
+{% endblock body %}

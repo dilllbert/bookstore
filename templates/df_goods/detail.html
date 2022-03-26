@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block title %}{{book.title}}{% endblock title %}
+{% block topfiles%}
+    
+ <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+ <script type="text/javascript" src="{% static 'js/register.js' %}"></script>
+    
+    {% if  errmsg  %}
+        <script alert({{ errmsg }}></script>
+    {% endif %}
+{% endblock topfiles %}
+{% block search_bar %}{% endblock search_bar %}
+{% block body %}
+    <div class="container book_container">
+        <div class="row book_cover"> 
+            <div class="col-4 "> 
+                <img class="detail_img" src={{book.spu_image}}>
+            </div>
+            <div class="col-7 i detail_content"> 
+                <div class="container ">
+                    <div class="row"> 
+                        <div class="col-2" id="detail_inner">
+                            <p>書名</p> 
+                            <p>作者</p> 
+                            <p>出版商</p> 
+                            {% if book.date %}
+                                <p> 發行日</p> 
+                            {% endif %}
+                            <p>國際標準號</p> 
+                            <p>原價</p> 
+                        </div>
+                        <div class="col-10 "> 
+                            <p>{{ book.title }}</p>
+                            <p>{{ book.author }}</p>
+                            <p>{{ book.publisher }}</p>
+                            {% if book.date %}
+                                <p>{{ book.date }}</p>
+                            {% endif %}
+                            <p>{{ book.ISBN }}</p>
+                            <p>{{ book.orginal_price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if book.detail %}
+        <div class="detail_des">
+            <h1 class="detail_dest">內容簡介</h1>
+            <p>{{ book.detail | safe }}</p>
+        </div>
+
+        {% endif %}
+        
+    </div>
+           {% if  book.status%}
+                <div class="container book_container ">
+                    <div class="row det_tit">    
+                            <div class="col">價格</div>
+                            <div class="col">書況</div>
+                            <div class="col"></div>
+                        </div>   
+            
+            {% endif %}
+{% for book in Books_sku_res %}
+    {% if  book.status  %}
+        <div class="row skucon">  
+            <div class="col" >{{ book.price }}</div>
+            <div class="col">
+                    <i id="skuicon" class="fa-solid fa-photo-film wait" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>                      
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title" id="exampleModalLabel">書況影片</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body det_vim">
+                                <video class="det_vid" width="72%" height="48%" controls>
+                                    <source class='det_rvid' src="{{book.file.url}}" type="video/mp4">
+                                    </video>
+                            </div>
+                    
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col" id="skuicon"><a href="/cart/add/?gid={{ book.id }}" ><i class="fas fa-shopping-cart"></i></a></div>
+                </div>
+    {% endif %}
+{% endfor %}
+    {% if Books_sku_res %}
+    </div>  
+    {% endif %}
+{% endblock body %}

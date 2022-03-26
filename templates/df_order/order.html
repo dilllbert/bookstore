@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}提交訂單{% endblock title %}
+{% block page_title %}提交訂單{% endblock page_title %}
+{% block body %}
+<h3 class="common_title">確認收貨地址</h3>
+
+<div class="common_list_con clearfix">
+    <dl>
+        <dt>寄送到：</dt>
+        {% for addr in addrs %}
+        <dd><input type="radio" name="addr_id" value="{{ addr.id }}" {% if addr.is_default %}checked{% endif %}>
+            {{addr.addr }}（{{ addr.receiver }} 收 ,電話號碼:{{ addr.phone }}）</dd>
+        {% empty %}
+        <dd>無地址信息</dd>
+        {% endfor %}
+    </dl>
+    <a href="{% url 'user:address' %}" class="edit_site">編輯收貨地址</a>
+
+</div>
+
+<h3 class="common_title">支付方式</h3>
+<div class="common_list_con clearfix">
+    <input type="radio" name="pay_style" value="1" checked id="bankca">
+    <label>貨到付款</label>
+    <input type="radio" name="pay_style" value="2" id="bankcar">
+    <label>銀行轉帳</label>
+    <input type="radio" name="pay_style" value="3" id="bankcard">
+    <label>信用卡/金融卡</label>
+</div>
+<div class="common_list_con clearfix" id="chca" style="display: none;">
+    <dl>
+        <dt>選擇銀行帳戶：</dt>
+        {% for car in card %}
+        <dd><input type="radio" name="card_id" value="{{ car.id }} "required {% if car.is_default %}checked{% endif %}>
+            {{car.account }}</dd>
+        {% empty %}
+        <dd>無帳戶訊息</dd>
+        {% endfor %}
+    </dl>
+    <a href="{% url 'user:bank' %}" class="edit_site">編輯銀行帳戶</a>
+
+</div>
+    <ul class="cart_list_th clearfix">
+        <li class="col01">商品名稱</li>
+        <li class="col03">商品價格</li>
+    </ul>
+    {% for sku in skus %}
+    <ul class="cart_list_td clearfix" id="{{cart.id}}">
+     <li class="col02"><img src="{{ sku.ISBN.spu_image }}"></li>
+     <li class="col03">{{ sku.ISBN.title }}</li>
+     <li class="coll05">{{ sku.price }}</li>
+    </ul>
+   {%endfor%}
+    <!--<script>alert("123")</script>-->
+
+
+<h3 class="common_title">總金額結算</h3>
+
+<div class="common_list_con clearfix">
+    <div class="settle_con">
+        <div class="total_goods_count">共<em>{{ total_count }}</em>件商品，總金額<b>{{ total_price }}元</b></div>
+        <div class="transit">運費：<b>{{ transit_total }}元</b></div>
+        <div class="total_pay">實付款：<b>{{ total_pay }}元</b></div>
+    </div>
+</div>
+<div id="log"></div>
+<div class="order_submit clearfix">
+    {% csrf_token %}
+    <a href="javascript:;" sku_ids="{{ skus }}" id="order_btn">提交訂單</a>
+</div>
+{% endblock body %}
+
+{% block bottom %}
+<div class="popup_con">
+    <div class="popup">
+        <p>訂單提交成功！</p>
+    </div>
+
+    <div class="mask"></div>
+</div>
+{% endblock bottom %}
+
+{% block bottomfiles %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+<script type="text/javascript">
+    $('#order_btn').click(function () {
+        // 獲取用戶選擇的地址id, 支付方式，用戶要購買的商品的id
+        var addr_id = $('input[name="addr_id"]:checked').val()
+        var card_id = $('input[name="card_id"]:checked').val()
+        var pay_method = $('input[name="pay_style"]:checked').val()
+        var sku_ids = $(this).attr('sku_ids')
+        var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+        // 組織參數
+        params = {
+            'addr_id': addr_id,
+            'pay_method': pay_method,
+            'sku_ids': sku_ids,
+            'csrfmiddlewaretoken': csrf,
+            'card':card_id
+        }
+        // alert(addr_id+":"+pay_method+":"+sku_ids)
+        // 發起ajax post請求, 訪問/order/commit, 傳遞參數:addr_id pay_method sku_ids
+        $.post('/order/commit', params, function (data) {
+            // 進行處理
+            if (data.res == 5) {
+                { alert('訂單創建成功') }
+                localStorage.setItem('order_finish', 2);
+                window.location.href = '/user/order/1';
+            
+            }
+            else {
+                alert(data.errmsg)
+            }
+
+        })
+
+    });
+</script>
+<script>
+    $( "input#bankca" ).on( "click", function() {
+      $( "#chca" ).css("display","none" );
+    });
+    </script>
+<script>
+    $( "input#bankcar" ).on( "click", function() {
+      $( "#chca" ).css("display","none" );
+    });
+    </script>
+<script>
+    $( "input#bankcard" ).on( "click", function() {
+      $( "#chca" ).css("display","block" );
+    });
+    </script>
+{% endblock bottomfiles %}

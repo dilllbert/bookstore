@@ -1,0 +1,61 @@
+{% extends 'base_user_center.html' %}
+{% load static %}
+{% block topfiles%}
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/register.js' %}"></script>
+    {% if  errmsg  %}
+        <script alert({{ errmsg }}></script>
+    {% endif %}
+{% endblock topfiles %}
+{% block right_content %}
+    <div class="right_content clearfix">
+        {% csrf_token %}
+        <h3 class="common_title2">全部訂單</h3>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                
+                <th scope="col">訂單號</th>
+                <th scope="col">訂單創建時間</th>
+                <th scope="col">付款/查看</th>
+              </tr>
+            </thead>
+            <tbody>
+        {% for order in order_page %}
+        <tr>
+            <th scope="row">
+                <a  href="/user/orderdetail/?order_id={{order.id}}" target="_blank">{{ order.id }}</a>
+            </th>
+            <td>{{order.date|date:'Y年m月d日 H:i' }}</td>
+
+            {% if order.pay_method == 2%}
+            <td>
+                <a  href="/user/pay/?order_id={{order.id}}">&nbsp&nbsp&nbsp&nbsp付款</a>
+            </td>
+                </tr>
+            {% elif order.pay_method == 1 %}									
+                <td>
+                    <a  href="/user/gin/?order_id={{order.id}}">&nbsp&nbsp&nbsp&nbsp查看</a>
+                </td>
+            {% else %}
+            <td>
+                <a  href="/user/gin/?order_id={{order.id}}">&nbsp&nbsp&nbsp&nbsp查看</a>
+            </td>
+            </tr>
+            {% endif %}
+             
+        {% endfor %}
+    </tbody>
+</table>
+        <div class="pagenation">
+            {% if order_page.has_previous %}
+                <a href="{% url 'user:order' order_page.previous_page_number %}">上一頁</a>
+            {% endif %}
+            {% if order_page.has_next %}
+                <a href="{% url 'user:order' order_page.next_page_number %}">下一頁></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock right_content %}
+{% block bottomfiles %}
+{% endblock bottomfiles %}

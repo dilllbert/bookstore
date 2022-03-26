@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block title %}首頁{% endblock title %}
+
+{% block search_bar %}{% endblock search_bar %}
+{% block body %}
+<div class="index_banner"><img src="{% static 'images/index_banner.jpg' %}" class="img img-fluid hover-shadow" ></div>
+<div class="container indexmom">
+    <div class="row row-cols-4 index_content">
+      <div class="col abc">
+        <a href="/user/" ><div class="col category">帳戶中心</div></a>
+        <div class="content_img"><img src="{% static 'images/customer.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/user/post" ><div class="col category">賣家管理</div></a>
+        <div class="content_img"><img src="{% static 'images/seller.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/1" ><div class="col category">商業</div></a>
+        <div class="content_img"><img src="{% static 'images/business.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/2" ><div class="col category">法律</div></a>
+        <div class="content_img"><img src="{% static 'images/law.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/3" ><div class="col category">工程</div></a>
+        <div class="content_img"><img src="{% static 'images/engine.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/4" ><div class="col category">語言</div></a>
+        <div class="content_img"><img src="{% static 'images/language.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/5" ><div class="col category">社科</div></a>
+        <div class="content_img"><img src="{% static 'images/edu.jpg' %}" class="img img-fluid hover-shadow" ></div>
+      </div>
+    <div class="col abc">
+        <a href="/list/6" ><div class="col category">其他</div></a>
+        <div class="content_img"><img src="{% static 'images/others.jpg' %}" class="img img-fluid hover-shadow" ></div>
+    </div>
+  </div>
+{% endblock body %}

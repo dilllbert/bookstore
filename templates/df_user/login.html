@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block title %}登入{% endblock title %}
+{% block header_con %}
+{% endblock header_con %}
+{% block body %}
+<div class="login_form ">
+	<div class="login_title clearfix">
+		<h1>用戶登錄</h1>
+		<a href="{% url 'user:register' %}">立即註冊</a>
+	</div>
+	<div class="form_input">
+		{# 頁麵的form不設置action, 提交錶單時是訪問瀏覽器地址欄中的地址 #}
+		<form method="post">
+			{% csrf_token %}
+			<input type="text" name="username" class="name_input" value="{{ username }}" placeholder="請輸入用戶名">
+			<div class="user_error">輸入錯誤</div>
+			<input type="password" name="pwd" class="pass_input" placeholder="請輸入密碼">
+			<div class="pwd_error">輸入錯誤</div>
+			<div class="more_input clearfix">
+				<input type="checkbox" name="remember" {{ checked }}>
+				<label>記住用戶名</label>
+			</div>
+			<input type="submit" name="" value="登錄" class="input_submit">
+		</form>
+	</div>
+</div>
+
+{% endblock body %}

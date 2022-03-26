@@ -1,0 +1,100 @@
+{# 用戶中心-3個頁麵 #}
+{% extends 'base_user_center.html' %}
+{% load static%}
+{% block title %}賣家管理{% endblock title %}
+{% block page_title %}用戶中心{% endblock page_title %}
+{% block topfiles%}
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/register.js' %}"></script>
+    {% if  errmsg  %}
+        <script alert({{ errmsg }}></script>
+    {% endif %}
+    <script>
+        function cart_del(cart_id){
+            del=confirm('確定要刪除嗎?');
+            if(del){
+                $.get('/user/postdelete'+ cart_id + '/',function(data){
+                    $('ul').remove('#' + cart_id);  
+                });
+            }
+	}
+    </script>
+    {% if  errmsg  %}
+        <script alert({{ errmsg }}></script>
+{% endif %}
+
+{% endblock topfiles %}
+{% block cart_bar %}
+{% endblock cart_bar %}
+
+{% block right_content %}
+    <Form method="post" action="{% url 'user:posthandle' %}"  Enctype="multipart/form-data" >
+        <div class="post-text">
+            <label for="ISBN">ISBN</label>
+            <input type="text" id="ISBN" name="ISBN"  placeholder="ISBN" class="form-control" style="width:430px;" required><br>
+            <label for="price">價格</label>
+            <input type="text" id="price" name="price"  placeholder="價格" class="form-control" style="width:430px;" required><br>
+            <label for="goods_video">書況影片 (僅限mp4)</label>
+            <input type="file"  name="goods_video" id="file" accept="video/*" onchange="return fileValidation()" required><br>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    {% for sku in books %}
+        {% if sku.status == 1 %}
+            
+            <ul class="goods_list_td clearfix" id="{{sku.id}}">
+                <li class="col02"><img src="{{ sku.ISBN.spu_image }}"></li>
+                <li class="col03">{{ sku.ISBN.title }}</li>
+                <li class="col05">{{ sku.price }}元</li>
+                <li class="col08"><a href="javascript:cart_del({{sku.id}});">刪除</a></li>
+            </ul>
+        {% else %}
+            <ul class="goods_list_td clearfix" id="{{sku.id}}">
+                <li class="col02"><img src="{{ sku.ISBN.spu_image }}"></li>
+                <li class="col03" style="color:cadetblue;">{{ sku.ISBN.title }}</li>
+                <li class="col05">{{ sku.price }}元</li>
+            </ul>
+        {% endif %}
+    {% endfor %}
+    {% endblock right_content %}
+    {% block bottomfiles %}
+    
+  
+    <script>
+        function fileValidation() {
+            var fileInput = 
+                document.getElementById('file');
+              
+            var filePath = fileInput.value;
+          
+            // Allowing file type
+            var allowedExtensions =/^.*\.(mp|MP)4$/; 
+            
+              
+            if (!allowedExtensions.exec(filePath)) {
+                alert('影片格式不符，請再重新輸入');
+                fileInput.value = '';
+                return false;
+            } 
+            else 
+            {
+              
+                // Image preview
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById(
+                            'imagePreview').innerHTML = 
+                            '<img src="' + e.target.result
+                            + '"/>';
+                    };
+                      
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            }
+        }
+    </script>
+        {% endblock bottomfiles %}

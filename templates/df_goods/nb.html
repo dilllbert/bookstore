@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}列表{% endblock title %}
+{% block body %}
+<div class="container">
+    <div class="row "> 
+        <div class=" col-2 idnex_lefthandside">
+            <dl>
+                <dt>分類</dt>
+                <a href="/user/" ><dd>用戶中心</dd></a>
+                <a href="/user/post" ><dd>賣家管理</dd></a>
+                <a href="/list/1" ><dd>商業</dd></a>
+                <a href="/list/2" ><dd>法律</dd></a>
+                <a href="/list/3" ><dd>工程</dd></a>
+                <a href="/list/4" ><dd>語言</dd></a>
+                <a href="/list/5" ><dd>社科</dd></a>
+                <a href="/list/6" ><dd>其他</dd></a>
+            </dl>     
+        </div>
+        <div class="col-5 nb">  
+            <div class="nb_list">
+                <h1 class="nb_list_t">建議您</h1>
+                <h6 class="nb_list_c">‧檢查是否有錯別字或拼字錯誤的情形       </h6>
+                <h6 class="nb_list_c">‧請以普遍的關鍵字重新搜尋               </h6>
+                <h6 class="nb_list_c">‧請使用其他語義相近的關鍵字來重新查詢   </h6>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

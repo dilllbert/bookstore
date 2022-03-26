@@ -1,0 +1,86 @@
+{%extends 'base.html'%}
+{%block topfiles%}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+ //刪除
+ function cart_del(cart_id){
+  del=confirm('確定要刪除嗎?');
+  if(del){
+   $.get('/cart/delete'+ cart_id + '/',function(data){
+    $('ul').remove('#' + cart_id);
+    total();
+    
+   });
+  }
+ }
+
+ //計算小計和總計
+ function total() {
+  var total_price = 0
+  var total_count = 0
+  $('.cart_list_td').find(':checked').parents('ul').each(function () {
+   //獲取單價
+   amount = $(this).children('.col05').text()
+   //計算小計
+   total_count+=1
+   total_price += parseFloat(amount)
+  });
+  //顯示總計
+  $('.settlements').find('em').text(total_price.toFixed(0))
+  $('.total_count1').text(total_count);
+  
+ }
+
+ $(function (){
+
+  total();
+   //全選、全消
+  $('#check_all').click(function () {
+      state=$(this).prop('checked');
+         $(':checkbox:not(#check_all)').prop('checked',state);
+         total();
+        });
+
+  //選擇
+  $(':checkbox:not(#check_all)').click(function () {
+   if($(this).prop('checked')){
+       if($(':checked').length+1==$(':checkbox').length){
+           $('#check_all').prop('checked',true);
+    }
+   }else{
+       $('#check_all').prop('checked',false);
+   }
+   total();
+        });
+
+ });
+</script>
+{%endblock topfiles%}
+
+{%block body%}
+<form action="/order/" method="post">
+ <ul class="cart_list_th clearfix">
+  <li class="col01">商品名稱</li>
+  <li class="col03">商品價格</li>
+  <li class="col06"></li>
+ </ul>
+{%for cart in carts%}
+ <ul class="cart_list_td clearfix" id="{{cart.id}}">
+  <li class="col01"><input type="checkbox" name="cart_id" value="{{cart.goods_id}}" checked="false"></li>
+  <li class="col02"><img src="{{cart.goods.ISBN.spu_image }}"></li>
+  <li class="col03">{{cart.goods.ISBN.title}}</li>
+  <li class="col05">{{cart.goods.price}}</li>
+  <li class="col08" id="cart_8"><a href="javascript:cart_del({{cart.id}});">刪除</a></li>
+ </ul>
+{%endfor%}
+ <!--<script>alert("123")</script>-->
+ <ul class="settlements">
+  <li class="col01"><input id="check_all" type="checkbox" checked="checked"></li>
+  <li class="col02">全選</li>
+  <li class="col03">合計(不含運費)：<span>NT$</span>
+   <em id="total">{{total_count}}</em>
+   <br>共計<b class="total_count1">0</b>件商品</li>
+  <li class="col04"><input type="submit" value="結帳去"></li>
+ </ul>
+</form>
+ {%endblock body%}

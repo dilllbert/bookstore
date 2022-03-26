@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}列表{% endblock title %}
+{% block body %}
+<div class="container">
+    <div class="row "> 
+        <div class=" col-1 idnex_lefthandside">
+            <dl>
+                <dt>分類</dt>
+                <a href="/user/" ><dd>用戶中心</dd></a>
+                <a href="/user/post" ><dd>賣家管理</dd></a>
+                <a href="/list/1" ><dd>商業</dd></a>
+                <a href="/list/2" ><dd>法律</dd></a>
+                <a href="/list/3" ><dd>工程</dd></a>
+                <a href="/list/4" ><dd>語言</dd></a>
+                <a href="/list/5" ><dd>社科</dd></a>
+                <a href="/list/6" ><dd>其他</dd></a>
+            </dl>     
+        </div>
+        <div class="index_set col-8">
+            <div class="index_list">
+                {% for book in c_page %}
+                <div class="container list_containter">
+                    <div id="list_row" class="row ">   
+                        <div class="col-2 list_content">
+                            <img src={{book.spu_image}}>
+                        </div>
+                        <div class="col-8 list_content">
+                            <p id="first_p"><a href="/goods/?ISBN_Q={{book.ISBN}}">{{ book.title }}</a></p>
+                            <p>{{ book.author }}</p>
+                            <p>{{ book.publisher }}</p>
+                            <p>{{ book.date}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>   
+    </div>   
+
+ </div>
+</div>
+    <div class="pagenation">
+        {% if c_page.has_previous %}
+            <a href="/list/{{ typeid }}?page={{ c_page.previous_page_number }}">上一頁</a>
+        {% endif %}
+
+        {% if c_page.has_next %}
+            <a href="/list/{{typeid}}?page={{ c_page.next_page_number }}">下一頁</a>
+        {% endif %}
+        
+    
+    </div>
+{% endblock body %}
