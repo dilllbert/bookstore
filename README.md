@@ -1,3 +1,3 @@
 # 網站啟動
 
-在終端機輸入python manage.py runserver
+PYTHON後端 建置的二手書成網頁
